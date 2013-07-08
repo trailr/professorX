@@ -1,0 +1,43 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+html, body {
+	background-color: #090909;
+	color: #f0f0f0;
+}
+.mutants {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+.mutant {
+	display: inline-block;
+	text-align: center;
+	width: 25%;
+	min-width: 220px;
+	margin: 0;
+	float: left;
+}
+#allBlue {
+	position: relative;
+	left: 50%;
+	margin-left: -460px;
+	margin-top: 20px;
+}
+.mutant.awol img.enabled {
+	display: none;
+}
+.mutant.awol img.disabled {
+	display: inline;
+}
+.mutant.present img.enabled {
+	display: inline;
+}
+.mutant.present img.disabled {
+	display: none;
+}
+img.greenLED,img.redLED,#allBlue {
+	cursor: pointer;
+}
