@@ -52,20 +52,22 @@ io.sockets.on('connection', function (socket) {
   iosocket = socket;
   socket.on('message',function(data){
     var bits = data.split(":");
+    console.log("bits[0]:",bits[0]);
     switch (bits[0]) {
+      case "ID" :
       case "mReport" :
         io.sockets.emit('mutant_report', {
           'mutantID': bits[1],
-          'distance': bits[2]
+          'report': bits
         });
-        console.log(bits[1],bits[2]);
+        console.log("mReport:",bits[1],bits);
         break;
       case "cmd" :
         console.log("GOT COMMAND",data);
         io.sockets.emit(bits[1]);
         break;
       default :
-        console.log(data);
+        console.log("data:",data);
         break;
     }
   });

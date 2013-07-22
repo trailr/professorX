@@ -6,6 +6,7 @@
 html, body {
 	background-color: #090909;
 	color: #f0f0f0;
+	cursor: none;
 }
 .mutants {
 	width: 100%;
@@ -22,8 +23,7 @@ html, body {
 }
 #allBlue {
 	position: relative;
-	left: 50%;
-	margin-left: -460px;
+	left: 25%;
 	margin-top: 20px;
 }
 .mutant.awol img.enabled {
@@ -40,4 +40,10 @@ html, body {
 }
 img.greenLED,img.redLED,#allBlue {
 	cursor: pointer;
+}
+.LEDButtons img.focused {
+	border: 2px solid #00ffff;
+}
+#allBlue.focused {
+	border: 2px solid #00ffff;
 }

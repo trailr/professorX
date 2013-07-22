@@ -4,18 +4,68 @@ mutantIDs["mutant1"] = "GAMBIT";
 mutantIDs["GAMBIT"] = "1";
 mutantIDs["mutant2"] = "BANSHEE";
 mutantIDs["BANSHEE"] = "2";
-// mutantIDs["mutant4"] = "CYCLOPS";
-// mutantIDs["CYCLOPS"] = 4;
+mutantIDs["mutant3"] = "CYCLOPS";
+mutantIDs["CYCLOPS"] = "3";
+var buttonMap = [	"gLEDg","gLEDr","bLEDg","bLEDr","cLEDg","cLEDr",
+					"allBlue","allBlue","allBlue","allBlue","allBlue","allBlue"
+				];
+var colWidth = 6;
+var focusedIndex = 0;
+
+function syncFocus() {
+	$("*").removeClass("focused");
+	$("#"+buttonMap[focusedIndex]).addClass("focused");
+}
+
+syncFocus();
 
 var socket = io.connect("http://professor-x.frogdesign.com");
 
+$(document).keydown(function(event) {
+	event.preventDefault();
+	switch (event.which) {
+		case 13 :
+			//SELECT
+			$("#"+buttonMap[focusedIndex]).click();
+			break;
+		case 38 :
+			//UP
+			focusedIndex = focusedIndex - colWidth;
+			break;
+		case 40 :
+			//DOWN
+			focusedIndex = focusedIndex + colWidth;
+			break;
+		case 37 :
+			//LEFT
+			focusedIndex--;
+			break;
+		case 39 :
+			//RIGHT
+			focusedIndex++;
+			break;
+		case 27 :
+			//MENU
+			break;
+		default :
+			break;
+	}
+	if (focusedIndex < 0) {
+		focusedIndex = 11;
+	} else {
+		if (focusedIndex > 11) focusedIndex = 0;
+	}
+
+	syncFocus();
+	console.log(event.which);
+});
+
 socket.on('mutant_report', function (data) {
 	if (data.mutantID != undefined) {
-		renderData(data.mutantID,data.distance);
+		renderData(data.mutantID,data.report);
 		renderStatus(data.mutantID);
 	}
 });
-
 
 function lightLED(mutantID,LED) {
 	console.log(mutantID,LED);
@@ -40,12 +90,20 @@ function renderData(mutantID, report) {
 	console.log("renderData:",mutantID,report);
 	var search = "" + "mutant" + mutantID;
 	mutantCallsign = mutantIDs[search];
-	report = report.substring(1);
+	//report = report.substring(1);
 	if (mutantCallsign) {
-		if (parseInt(report) > 300) {
-			report = "out of range";
+		output = "";
+		for (var i = 2;i < report.length; i++) {
+			r = report[i];
+			type = r.substring(0,1);
+			value = r.substring(1);
+			if (type == "P" && parseInt(value) > 300) {
+				output = output + "P: out of range ";
+			} else {
+				output = output + type + ": " + value + " ";
+			}
 		}
-		$('#'+mutantCallsign.toLowerCase()+' .proximity').html(report);
+		$('#'+mutantCallsign.toLowerCase()+' .proximity').html(output);
 	}
 }
 
